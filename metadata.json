@@ -1,0 +1,6 @@
+{
+  "name": "Ambulance Intelligence Routing",
+  "description": "Real-time emergency ambulance dispatch, ETA ranking, live routing navigation, and hospital intake queue.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
