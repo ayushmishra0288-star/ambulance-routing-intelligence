@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-red-600/30 transition-all cursor-pointer active:scale-95"
           >
             <ShieldAlert className="w-4 h-4" />
-            <span className="hidden sm:inline">New 911 Call</span>
+            <span className="hidden sm:inline">New 101 Call</span>
           </button>
 
           {/* Role Switcher Tabs */}

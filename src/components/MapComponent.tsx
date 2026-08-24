@@ -84,6 +84,9 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     if (mapInstanceRef.current && center) {
       const mapCenter: L.LatLngTuple = [center[0], center[1]];
       mapInstanceRef.current.setView(mapCenter, zoom);
+      setTimeout(() => {
+        mapInstanceRef.current?.invalidateSize();
+      }, 100);
     }
   }, [center?.[0], center?.[1], zoom]);
 

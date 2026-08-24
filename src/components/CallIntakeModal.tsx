@@ -71,7 +71,7 @@ export const CallIntakeModal: React.FC<CallIntakeModalProps> = ({
   onClose,
   onSubmit
 }) => {
-  const [callerInfo, setCallerInfo] = useState('Bystander / 911 Caller');
+  const [callerInfo, setCallerInfo] = useState('Bystander / 101 Caller');
   const [callerPhone, setCallerPhone] = useState('(415) 555-0199');
   const [chiefComplaint, setChiefComplaint] = useState('');
   const [address, setAddress] = useState('Market St & 3rd St, San Francisco, CA');
@@ -126,7 +126,7 @@ export const CallIntakeModal: React.FC<CallIntakeModalProps> = ({
               <ShieldAlert className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Emergency 911 Call Intake</h2>
+              <h2 className="text-base font-bold text-white">Emergency 102 Call Intake</h2>
               <p className="text-xs text-slate-400">Create incident for geospatial routing & hospital matching</p>
             </div>
           </div>

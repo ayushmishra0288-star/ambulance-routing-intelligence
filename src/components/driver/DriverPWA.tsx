@@ -26,13 +26,15 @@ interface DriverPWAProps {
   currentAmbulanceId: string;
   onSelectAmbulance: (id: string) => void;
   onRefresh: () => void;
+  isCallModalOpen?: boolean;
 }
 
 export const DriverPWA: React.FC<DriverPWAProps> = ({
   ambulances,
   currentAmbulanceId,
   onSelectAmbulance,
-  onRefresh
+  onRefresh,
+  isCallModalOpen = false
 }) => {
   const [activeJob, setActiveJob] = useState<DispatchJob | null>(null);
   const [loading, setLoading] = useState(false);
@@ -365,7 +367,10 @@ export const DriverPWA: React.FC<DriverPWAProps> = ({
           </div>
 
           {/* Navigation Map for Driver */}
-          <div className="h-[360px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
+          <div 
+            className={`h-[360px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800 ${isCallModalOpen ? 'hidden' : ''}`}
+            style={{ display: isCallModalOpen ? 'none' : 'block' }}
+          >
             <MapComponent
               ambulances={[selectedAmbulance]}
               hospitals={activeJob.hospital ? [activeJob.hospital] : []}

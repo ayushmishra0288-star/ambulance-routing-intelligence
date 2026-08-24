@@ -38,6 +38,7 @@ interface DispatcherConsoleProps {
   events: StatusEvent[];
   onRefresh: () => void;
   onOpenCallModal: () => void;
+  isCallModalOpen?: boolean;
 }
 
 export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
@@ -47,7 +48,8 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
   jobs,
   events,
   onRefresh,
-  onOpenCallModal
+  onOpenCallModal,
+  isCallModalOpen = false
 }) => {
   const [selectedCall, setSelectedCall] = useState<EmergencyCall | null>(null);
   const [rankedAmbulances, setRankedAmbulances] = useState<RankedAmbulance[]>([]);
@@ -180,13 +182,13 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
                 </div>
                 <h3 className="text-sm font-bold text-white">All Emergency Queues Clear</h3>
                 <p className="text-xs text-slate-400 max-w-xs mt-1">
-                  No unassigned 911 calls. Create a new emergency call to trigger the spatial pre-filter and ETA ranker.
+                  No unassigned 101 calls. Create a new emergency call to trigger the spatial pre-filter and ETA ranker.
                 </p>
                 <button
                   onClick={onOpenCallModal}
                   className="mt-4 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow transition cursor-pointer"
                 >
-                  Create Demo 911 Call
+                  Create Demo 101 Call
                 </button>
               </div>
             ) : (
@@ -494,7 +496,10 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
       </div>
 
       {/* Right Column: Live Map */}
-      <div className="lg:col-span-7 h-full flex flex-col gap-2">
+      <div 
+        className={`lg:col-span-7 h-full flex flex-col gap-2 ${isCallModalOpen ? 'hidden' : ''}`}
+        style={{ display: isCallModalOpen ? 'none' : 'flex' }}
+      >
         <div className="flex-1 min-h-[420px] rounded-2xl overflow-hidden shadow-xl border border-slate-800">
           <MapComponent
             ambulances={ambulances}

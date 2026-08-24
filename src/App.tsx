@@ -217,6 +217,7 @@ export default function App() {
             events={events}
             onRefresh={loadFullState}
             onOpenCallModal={() => setIsCallModalOpen(true)}
+            isCallModalOpen={isCallModalOpen}
           />
         )}
 
@@ -226,6 +227,7 @@ export default function App() {
             currentAmbulanceId={currentAmbulanceId}
             onSelectAmbulance={setCurrentAmbulanceId}
             onRefresh={loadFullState}
+            isCallModalOpen={isCallModalOpen}
           />
         )}
 
@@ -248,7 +250,7 @@ export default function App() {
         )}
       </main>
 
-      {/* 911 Call Intake Modal */}
+      {/* 101 Call Intake Modal */}
       <CallIntakeModal
         isOpen={isCallModalOpen}
         onClose={() => setIsCallModalOpen(false)}
