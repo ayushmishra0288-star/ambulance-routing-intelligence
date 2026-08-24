@@ -9,7 +9,7 @@ import { apiRouter } from './server/routes/api.router.js';
 async function startServer() {
   const app = express();
   const httpServer = createHttpServer(app);
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT)||3000;
 
   // Middlewares
   app.use(cors());
