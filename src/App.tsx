@@ -17,6 +17,7 @@ import {
 import { api, setApiAuthToken } from './services/api.js';
 import { getSocket, registerSocketClient } from './services/socket.js';
 import { Navbar } from './components/Navbar.js';
+import { OperationalPulse } from './components/OperationalPulse.js';
 import { DispatcherConsole } from './components/dispatcher/DispatcherConsole.js';
 import { DriverPWA } from './components/driver/DriverPWA.js';
 import { HospitalPortal } from './components/hospital/HospitalPortal.js';
@@ -195,7 +196,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-400 selection:text-slate-950">
       {/* Top Navbar with live telemetry */}
       <Navbar
         currentRole={currentRole}
@@ -204,6 +205,15 @@ export default function App() {
         stats={stats}
         connected={connected}
         onOpenCallModal={() => setIsCallModalOpen(true)}
+      />
+
+      <OperationalPulse
+        ambulances={ambulances}
+        hospitals={hospitals}
+        calls={calls}
+        jobs={jobs}
+        connected={connected}
+        currentRole={currentRole}
       />
 
       {/* Main Role-Based Views */}
