@@ -73,10 +73,12 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const routeRef = useRef<any>(null);
+  const trafficLayerRef = useRef<any>(null);
   const clickListenerRef = useRef<any>(null);
   const infoWindowRef = useRef<any>(null);
   const [mapsReady, setMapsReady] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [trafficEnabled, setTrafficEnabled] = useState(true);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
   useEffect(() => {
@@ -107,6 +109,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           ]
         });
         infoWindowRef.current = new maps.InfoWindow();
+        trafficLayerRef.current = new maps.TrafficLayer();
+        trafficLayerRef.current.setMap(mapRef.current);
         setMapsReady(true);
       })
       .catch((error) => !cancelled && setLoadError(error.message));
@@ -116,6 +120,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
       if (clickListenerRef.current) clickListenerRef.current.remove();
       markersRef.current.forEach(marker => marker.setMap(null));
       routeRef.current?.setMap(null);
+      trafficLayerRef.current?.setMap(null);
+      trafficLayerRef.current = null;
       mapRef.current = null;
     };
   }, [apiKey]);
@@ -126,6 +132,12 @@ export const MapComponent: React.FC<MapComponentProps> = ({
       mapRef.current.setZoom(zoom);
     }
   }, [center[0], center[1], zoom, mapsReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapsReady || !trafficLayerRef.current) return;
+    trafficLayerRef.current.setMap(trafficEnabled ? map : null);
+  }, [trafficEnabled, mapsReady]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -232,6 +244,22 @@ export const MapComponent: React.FC<MapComponentProps> = ({
       )}
       {!mapsReady && !loadError && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-950 text-sm text-slate-400">Loading Google Maps…</div>
+      )}
+      {mapsReady && (
+        <button
+          type="button"
+          aria-pressed={trafficEnabled}
+          aria-label="Toggle live traffic"
+          onClick={() => setTrafficEnabled(enabled => !enabled)}
+          className={`absolute top-3 right-3 z-10 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold shadow-lg backdrop-blur transition-colors ${
+            trafficEnabled
+              ? 'border-emerald-400/60 bg-slate-900/90 text-emerald-300'
+              : 'border-slate-700 bg-slate-900/90 text-slate-300'
+          }`}
+        >
+          <span className={`h-2 w-2 rounded-full ${trafficEnabled ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
+          Live traffic {trafficEnabled ? 'ON' : 'OFF'}
+        </button>
       )}
       {interactivePick && mapsReady && (
         <div className="absolute top-3 left-3 z-10 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-amber-300 font-medium shadow-lg">
