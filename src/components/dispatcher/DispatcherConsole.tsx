@@ -127,9 +127,21 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
 
   const pendingCalls = calls.filter(c => c.status === 'Pending');
   const activeMissions = jobs.filter(j => j.status !== 'Completed' && j.status !== 'Cancelled');
+  const selectedAmbulanceMatch = rankedAmbulances.find(
+    match => match.ambulance.id === selectedAmbulanceId
+  );
+  const selectedHospitalSuggestion = suggestedHospitals.find(
+    suggestion => suggestion.hospital.id === selectedHospitalId
+  );
+  const combinedTravelMinutes =
+    selectedAmbulanceMatch && selectedHospitalSuggestion
+      ? Math.ceil(
+          (selectedAmbulanceMatch.eta_seconds + selectedHospitalSuggestion.eta_seconds) / 60
+        )
+      : null;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-[calc(100vh-5rem)] p-4 max-w-7xl mx-auto">
+    <div className="mx-auto grid min-h-[700px] max-w-[1600px] grid-cols-1 gap-5 p-4 lg:grid-cols-12 xl:h-[calc(100vh-12rem)]">
       {/* Left Column: Intake Queue & Intelligent Match Panel */}
       <div className="lg:col-span-5 flex flex-col gap-4 overflow-hidden h-full">
         {/* Navigation Tabs */}
@@ -269,7 +281,7 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
                         PostGIS: 30km
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">
-                        OpenRouteService ETA
+                        Road-network ETA
                       </span>
                     </div>
                   </div>
@@ -389,6 +401,44 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
                     </div>
                   </div>
 
+                  {/* Explainable dispatch decision */}
+                  {selectedAmbulanceMatch && selectedHospitalSuggestion && (
+                    <div className="relative overflow-hidden rounded-2xl border border-cyan-400/20 bg-gradient-to-r from-cyan-950/70 via-slate-950 to-violet-950/60 p-3">
+                      <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cyan-400/10 blur-2xl" />
+                      <div className="relative">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
+                            <Sparkles className="h-3.5 w-3.5" />
+                            Explainable dispatch brief
+                          </span>
+                          <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-0.5 text-[9px] font-bold text-cyan-200">
+                            Human confirmed
+                          </span>
+                        </div>
+                        <p className="mt-2 text-[11px] leading-relaxed text-slate-300">
+                          <strong className="text-white">{selectedAmbulanceMatch.ambulance.call_sign}</strong>
+                          {' '}can reach the scene in{' '}
+                          <strong className="text-emerald-300">{selectedAmbulanceMatch.eta_formatted}</strong>.
+                          {' '}The selected destination,{' '}
+                          <strong className="text-violet-300">{selectedHospitalSuggestion.hospital.name}</strong>,
+                          {' '}has {selectedHospitalSuggestion.hospital.available_beds} intake beds and a scene-to-hospital ETA of{' '}
+                          {selectedHospitalSuggestion.eta_formatted}.
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          <span className="rounded-lg border border-blue-400/20 bg-blue-400/10 px-2 py-1 text-[9px] font-bold text-blue-200">
+                            {selectedAmbulanceMatch.match_score}% response fit
+                          </span>
+                          <span className="rounded-lg border border-emerald-400/20 bg-emerald-400/10 px-2 py-1 text-[9px] font-bold text-emerald-200">
+                            {selectedAmbulanceMatch.equipment_match ? 'Capability matched' : 'Capability exception'}
+                          </span>
+                          <span className="rounded-lg border border-violet-400/20 bg-violet-400/10 px-2 py-1 text-[9px] font-bold text-violet-200">
+                            ~{combinedTravelMinutes} min combined travel
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Confirm & Dispatch Action */}
                   <button
                     onClick={handleDispatch}
@@ -500,7 +550,17 @@ export const DispatcherConsole: React.FC<DispatcherConsoleProps> = ({
         className={`lg:col-span-7 h-full flex flex-col gap-2 ${isCallModalOpen ? 'hidden' : ''}`}
         style={{ display: isCallModalOpen ? 'none' : 'flex' }}
       >
-        <div className="flex-1 min-h-[420px] rounded-2xl overflow-hidden shadow-xl border border-slate-800">
+        <div className="flex items-center justify-between px-1">
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-[0.18em] text-white">City operations map</h2>
+            <p className="text-[10px] text-slate-500">Fleet telemetry, hospital readiness, incidents, and live traffic</p>
+          </div>
+          <div className="flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[9px] font-bold text-emerald-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Decision layer online
+          </div>
+        </div>
+        <div className="flex-1 min-h-[420px] rounded-2xl overflow-hidden shadow-2xl shadow-cyan-950/20 border border-cyan-400/10">
           <MapComponent
             ambulances={ambulances}
             hospitals={hospitals}
