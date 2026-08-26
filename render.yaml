@@ -15,5 +15,3 @@ services:
         generateValue: true
       - key: ROUTING_PROVIDER
         value: osrm
-      - key: VITE_GOOGLE_MAPS_API_KEY
-        sync: false
