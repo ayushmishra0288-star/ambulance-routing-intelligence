@@ -37,28 +37,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCallModal
 }) => {
   return (
-    <header className="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-50 border-b border-cyan-400/10 bg-slate-950/90 backdrop-blur-xl">
+      <div className="mx-auto flex min-h-16 max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-2 sm:px-6">
         {/* Brand & Status */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/20 ring-1 ring-red-400/30">
+          <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-rose-500 shadow-lg shadow-cyan-500/20 ring-1 ring-cyan-300/30">
             <Radio className="w-5 h-5 text-white animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
-                <span>AIR</span>
+                <span className="tracking-[0.2em]">AIR</span>
                 <span className="text-xs px-2 py-0.5 rounded bg-red-950/80 text-red-400 border border-red-800/50 font-mono font-bold tracking-normal">
-                  MVP v1.0
+                  COMMAND v2
                 </span>
               </h1>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Ambulance Intelligence Routing</p>
+            <p className="text-[11px] text-slate-400 font-medium">Rapid-response operating system</p>
           </div>
         </div>
 
         {/* System Telemetry Badges */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden 2xl:flex items-center gap-3">
           <div className="px-3 py-1 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center gap-2 text-xs font-mono">
             <Truck className="w-3.5 h-3.5 text-emerald-400" />
             <span className="text-slate-400">Available:</span>
@@ -90,10 +90,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* New Call Button */}
           <button
             onClick={onOpenCallModal}
-            className="px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-red-600/30 transition-all cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 rounded-xl border border-rose-400/20 bg-gradient-to-r from-rose-600 to-red-500 px-3.5 py-2 text-xs font-extrabold text-white shadow-lg shadow-rose-600/30 transition-all hover:-translate-y-0.5 hover:shadow-rose-500/40 active:translate-y-0"
           >
             <ShieldAlert className="w-4 h-4" />
-            <span className="hidden sm:inline">New 101 Call</span>
+            <span className="hidden sm:inline">Create Incident</span>
           </button>
 
           {/* Role Switcher Tabs */}
@@ -102,12 +102,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onRoleChange('dispatcher')}
               className={`px-2.5 py-1 rounded-md font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                 currentRole === 'dispatcher'
-                  ? 'bg-blue-600 text-white shadow'
+                  ? 'bg-cyan-500 text-slate-950 shadow shadow-cyan-500/20'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               <Radio className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Dispatcher</span>
+              <span className="hidden md:inline">Command</span>
             </button>
 
             <button
@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Truck className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Driver PWA</span>
+              <span className="hidden md:inline">Responder</span>
             </button>
 
             <button
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Fleet/Admin</span>
+              <span className="hidden md:inline">Network</span>
             </button>
           </div>
 
