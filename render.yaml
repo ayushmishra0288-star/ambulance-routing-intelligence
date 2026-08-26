@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ambulance-routing-intelligence
+    runtime: node
+    plan: free
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ROUTING_PROVIDER
+        value: osrm
+      - key: VITE_GOOGLE_MAPS_API_KEY
+        sync: false
